@@ -1,16 +1,16 @@
-from electrum.util import print_error
+from electrum_drk.util import print_error
 from urlparse import urlparse, parse_qs
 from PyQt4.QtGui import QPushButton, QMessageBox, QDialog, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QLineEdit, QComboBox
 from PyQt4.QtCore import Qt
 
-from electrum.i18n import _
+from electrum_drk.i18n import _
 import re
 import os
-from electrum import Transaction
-from electrum.bitcoin import MIN_RELAY_TX_FEE, is_valid
-from electrum_gui.qt.qrcodewidget import QRCodeWidget
-from electrum import bmp
-from electrum_gui.qt import HelpButton, EnterButton
+from electrum_drk import Transaction
+from electrum_drk.bitcoin import MIN_RELAY_TX_FEE, is_valid
+from electrum_drk_gui.qt.qrcodewidget import QRCodeWidget
+from electrum_drk import bmp
+from electrum_drk_gui.qt import HelpButton, EnterButton
 import json
 
 try:
@@ -18,7 +18,7 @@ try:
 except ImportError:
     zbar = None
 
-from electrum import BasePlugin
+from electrum_drk import BasePlugin
 class Plugin(BasePlugin):
 
     def fullname(self): return 'QR scans'

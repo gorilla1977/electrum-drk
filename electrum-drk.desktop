@@ -1,0 +1,17 @@
+# If you want electrum to appear in a linux app launcher ("start menu"), install this by doing:
+# sudo desktop-file-install electrum.desktop
+
+[Desktop Entry]
+Comment=Lightweight Darkcoin Client
+Exec=electrum-drk %u
+GenericName[en_US]=Electrum-DRK
+GenericName=Electrum-DRK
+Icon=/usr/share/app-install/icons/electrum-drk.png
+Name[en_US]=Electrum Darkcoin Wallet
+Name=Electrum Darkcoin Wallet
+Categories=Network;
+StartupNotify=false
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/darkcoin
+

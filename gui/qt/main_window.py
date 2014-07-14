@@ -17,8 +17,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import sys, time, datetime, re, threading
-from electrum.i18n import _, set_language
-from electrum.util import print_error, print_msg
+from electrum_drk.i18n import _, set_language
+from electrum_drk.util import print_error, print_msg
 import os.path, json, ast, traceback
 import webbrowser
 import shutil
@@ -30,17 +30,17 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import PyQt4.QtCore as QtCore
 
-from electrum.bitcoin import MIN_RELAY_TX_FEE, is_valid
-from electrum.plugins import run_hook
+from electrum_drk.bitcoin import MIN_RELAY_TX_FEE, is_valid
+from electrum_drk.plugins import run_hook
 
 import icons_rc
 
-from electrum.util import format_satoshis
-from electrum import Transaction
-from electrum import mnemonic
-from electrum import util, bitcoin, commands, Interface, Wallet
-from electrum import SimpleConfig, Wallet, WalletStorage
-from electrum import Imported_Wallet
+from electrum_drk.util import format_satoshis
+from electrum_drk import Transaction
+from electrum_drk import mnemonic
+from electrum_drk import util, bitcoin, commands, Interface, Wallet
+from electrum_drk import SimpleConfig, Wallet, WalletStorage
+from electrum_drk import Imported_Wallet
 
 from amountedit import AmountEdit, BTCAmountEdit, MyLineEdit
 from network_dialog import NetworkDialog
@@ -72,7 +72,7 @@ PR_PAID    = 3     # send and propagated
 PR_ERROR   = 4     # could not parse
 
 
-from electrum import ELECTRUM_VERSION
+from electrum_drk import ELECTRUM_VERSION
 import re
 
 from util import *
@@ -129,7 +129,7 @@ class ElectrumWindow(QMainWindow):
         self.create_status_bar()
         self.need_update = threading.Event()
 
-        self.decimal_point = config.get('decimal_point', 5)
+        self.decimal_point = config.get('decimal_point', 8)
         self.num_zeros     = int(config.get('num_zeros',0))
         self.invoices      = {}
 
@@ -155,7 +155,7 @@ class ElectrumWindow(QMainWindow):
         if self.config.get("is_maximized"):
             self.showMaximized()
 
-        self.setWindowIcon(QIcon(":icons/electrum.png"))
+        self.setWindowIcon(QIcon(":icons/electrum-drk.png"))
         self.init_menubar()
 
         QShortcut(QKeySequence("Ctrl+W"), self, self.close)
@@ -202,7 +202,7 @@ class ElectrumWindow(QMainWindow):
 
 
     def load_wallet(self, wallet):
-        import electrum
+        import electrum_drk as electrum
 
         self.wallet = wallet
         self.update_wallet_format()
@@ -210,7 +210,7 @@ class ElectrumWindow(QMainWindow):
         self.invoices = self.wallet.storage.get('invoices', {})
         self.accounts_expanded = self.wallet.storage.get('accounts_expanded',{})
         self.current_account = self.wallet.storage.get("current_account", None)
-        title = 'Electrum ' + self.wallet.electrum_version + '  -  ' + self.wallet.storage.path
+        title = 'Electrum-DRK ' + self.wallet.electrum_version + '  -  ' + self.wallet.storage.path
         if self.wallet.is_watching_only(): title += ' [%s]' % (_('watching only'))
         self.setWindowTitle( title )
         self.update_wallet()
@@ -356,20 +356,20 @@ class ElectrumWindow(QMainWindow):
 
         help_menu = menubar.addMenu(_("&Help"))
         help_menu.addAction(_("&About"), self.show_about)
-        help_menu.addAction(_("&Official website"), lambda: webbrowser.open("http://electrum.org"))
+        help_menu.addAction(_("&Official website"), lambda: webbrowser.open("http://electrum-drk.org"))
         help_menu.addSeparator()
-        help_menu.addAction(_("&Documentation"), lambda: webbrowser.open("http://electrum.org/documentation.html")).setShortcut(QKeySequence.HelpContents)
+        help_menu.addAction(_("&Documentation"), lambda: webbrowser.open("http://electrum-drk.org/documentation.html")).setShortcut(QKeySequence.HelpContents)
         help_menu.addAction(_("&Report Bug"), self.show_report_bug)
 
         self.setMenuBar(menubar)
 
     def show_about(self):
-        QMessageBox.about(self, "Electrum",
-            _("Version")+" %s" % (self.wallet.electrum_version) + "\n\n" + _("Electrum's focus is speed, with low resource usage and simplifying Bitcoin. You do not need to perform regular backups, because your wallet can be recovered from a secret phrase that you can memorize or write on paper. Startup times are instant because it operates in conjunction with high-performance servers that handle the most complicated parts of the Bitcoin system."))
+        QMessageBox.about(self, "Electrum-DRK",
+            _("Version")+" %s" % (self.wallet.electrum_version) + "\n\n" + _("Electrum's focus is speed, with low resource usage and simplifying Darkcoin. You do not need to perform regular backups, because your wallet can be recovered from a secret phrase that you can memorize or write on paper. Startup times are instant because it operates in conjunction with high-performance servers that handle the most complicated parts of the Darkcoin system."))
 
     def show_report_bug(self):
-        QMessageBox.information(self, "Electrum - " + _("Reporting Bugs"),
-            _("Please report any bugs as issues on github:")+" <a href=\"https://github.com/spesmilo/electrum/issues\">https://github.com/spesmilo/electrum/issues</a>")
+        QMessageBox.information(self, "Electrum-DRK - " + _("Reporting Bugs"),
+            _("Please report any bugs as issues on github:")+" <a href=\"https://github.com/pooler/electrum-drk/issues\">https://github.com/pooler/electrum-drk/issues</a>")
 
 
     def notify_transactions(self):
@@ -400,7 +400,7 @@ class ElectrumWindow(QMainWindow):
                           self.notify(_("New transaction received. %(amount)s %(unit)s") % { 'amount' : self.format_amount(v), 'unit' : self.base_unit()})
 
     def notify(self, message):
-        self.tray.showMessage("Electrum", message, QSystemTrayIcon.Information, 20000)
+        self.tray.showMessage("Electrum-DRK", message, QSystemTrayIcon.Information, 20000)
 
 
 
@@ -448,9 +448,9 @@ class ElectrumWindow(QMainWindow):
         if self.decimal_point == 2:
             return 'bits'
         if self.decimal_point == 5:
-            return 'mBTC'
+            return 'mDRK'
         if self.decimal_point == 8:
-            return 'BTC'
+            return 'DRK'
         raise Exception('Unknown base unit')
 
     def update_status(self):
@@ -513,13 +513,13 @@ class ElectrumWindow(QMainWindow):
     def create_history_menu(self, position):
         self.history_list.selectedIndexes()
         item = self.history_list.currentItem()
-        be = self.config.get('block_explorer', 'Blockchain.info')
-        if be == 'Blockchain.info':
-            block_explorer = 'https://blockchain.info/tx/'
+        be = self.config.get('block_explorer', 'explorer.darkcoin.net')
+        if be == 'explorer.darkcoin.net':
+            block_explorer = 'http://explorer.darkcoin.net/tx/'
+        elif be == 'block-explorer.com':
+            block_explorer = 'http://block-explorer.com/tx/'
         elif be == 'Blockr.io':
-            block_explorer = 'https://blockr.io/tx/info/'
-        elif be == 'Insight.is':
-            block_explorer = 'http://live.insight.is/tx/'
+            block_explorer = 'https://ltc.blockr.io/tx/info/'
         if not item: return
         tx_hash = str(item.data(0, Qt.UserRole).toString())
         if not tx_hash: return
@@ -805,7 +805,7 @@ class ElectrumWindow(QMainWindow):
                 query.append('amount=%s'%format_satoshis(amount))
             if message:
                 query.append('message=%s'%urllib.quote(message))
-            p = urlparse.ParseResult(scheme='bitcoin', netloc='', path=addr, params='', query='&'.join(query), fragment='')
+            p = urlparse.ParseResult(scheme='darkcoin', netloc='', path=addr, params='', query='&'.join(query), fragment='')
             url = urlparse.urlunparse(p)
         else:
             url = ""
@@ -825,7 +825,7 @@ class ElectrumWindow(QMainWindow):
         from paytoedit import PayToEdit
         self.amount_e = BTCAmountEdit(self.get_decimal_point)
         self.payto_e = PayToEdit(self)
-        self.payto_help = HelpButton(_('Recipient of the funds.') + '\n\n' + _('You may enter a Bitcoin address, a label from your list of contacts (a list of completions will be proposed), or an alias (email-like address that forwards to a Bitcoin address)'))
+        self.payto_help = HelpButton(_('Recipient of the funds.') + '\n\n' + _('You may enter a Darkcoin address, a label from your list of contacts (a list of completions will be proposed), or an alias (email-like address that forwards to a Darkcoin address)'))
         grid.addWidget(QLabel(_('Pay to')), 1, 0)
         grid.addWidget(self.payto_e, 1, 1, 1, 3)
         grid.addWidget(self.payto_help, 1, 4)
@@ -865,7 +865,7 @@ class ElectrumWindow(QMainWindow):
         grid.addWidget(QLabel(_('Fee')), 5, 0)
         grid.addWidget(self.fee_e, 5, 1, 1, 2)
         grid.addWidget(HelpButton(
-                _('Bitcoin transactions are in general not free. A transaction fee is paid by the sender of the funds.') + '\n\n'\
+                _('Darkcoin transactions are in general not free. A transaction fee is paid by the sender of the funds.') + '\n\n'\
                     + _('The amount of fee can be decided freely by the sender. However, transactions with low fees take more time to be processed.') + '\n\n'\
                     + _('A suggested fee is automatically added to this field. You may override it. The suggested fee increases with the size of the transaction.')), 5, 3)
 
@@ -993,12 +993,12 @@ class ElectrumWindow(QMainWindow):
 
         for type, addr, amount in outputs:
             if addr is None:
-                QMessageBox.warning(self, _('Error'), _('Bitcoin Address is None'), _('OK'))
+                QMessageBox.warning(self, _('Error'), _('Darkcoin Address is None'), _('OK'))
                 return
             if type == 'op_return':
                 continue
             if type == 'address' and not bitcoin.is_address(addr):
-                QMessageBox.warning(self, _('Error'), _('Invalid Bitcoin Address'), _('OK'))
+                QMessageBox.warning(self, _('Error'), _('Invalid Darkcoin Address'), _('OK'))
                 return
             if amount is None:
                 QMessageBox.warning(self, _('Error'), _('Invalid Amount'), _('OK'))
@@ -1017,7 +1017,7 @@ class ElectrumWindow(QMainWindow):
             if not self.question(_("send %(amount)s to %(address)s?")%{ 'amount' : self.format_amount(amount) + ' '+ self.base_unit(), 'address' : o}):
                 return
             
-        confirm_fee = self.config.get('confirm_fee', 100000)
+        confirm_fee = self.config.get('confirm_fee', 1000000)
         if fee >= confirm_fee:
             if not self.question(_("The fee for this transaction seems unusually high.\nAre you really sure you want to pay %(fee)s in fees?")%{ 'fee' : self.format_amount(fee) + ' '+ self.base_unit()}):
                 return
@@ -1069,7 +1069,7 @@ class ElectrumWindow(QMainWindow):
                 self.show_message(tx.error)
                 self.send_button.setDisabled(False)
                 return
-            if tx.requires_fee(self.wallet.verifier) and fee < MIN_RELAY_TX_FEE:
+            if fee < tx.required_fee(self.wallet.verifier):
                 QMessageBox.warning(self, _('Error'), _("This transaction requires a higher fee, or it will not be propagated by the network."), _('OK'))
                 self.send_button.setDisabled(False)
                 return
@@ -1180,7 +1180,7 @@ class ElectrumWindow(QMainWindow):
         try:
             address, amount, label, message, request_url = util.parse_URI(URI)
         except Exception as e:
-            QMessageBox.warning(self, _('Error'), _('Invalid bitcoin URI:') + '\n' + str(e), _('OK'))
+            QMessageBox.warning(self, _('Error'), _('Invalid darkcoin URI:') + '\n' + str(e), _('OK'))
             return
 
         self.tabs.setCurrentIndex(1)
@@ -1202,7 +1202,7 @@ class ElectrumWindow(QMainWindow):
                 self.amount_e.setAmount(amount)
             return
 
-        from electrum import paymentrequest
+        from electrum_drk import paymentrequest
         def payment_request():
             self.payment_request = paymentrequest.PaymentRequest(self.config)
             self.payment_request.read(request_url)
@@ -1467,7 +1467,7 @@ class ElectrumWindow(QMainWindow):
             payto_addr = item.data(0,33).toString()
             menu.addAction(_("Copy to Clipboard"), lambda: self.app.clipboard().setText(addr))
             menu.addAction(_("Pay to"), lambda: self.payto(payto_addr))
-            menu.addAction(_("QR code"), lambda: self.show_qrcode("bitcoin:" + addr, _("Address")))
+            menu.addAction(_("QR code"), lambda: self.show_qrcode("darkcoin:" + addr, _("Address")))
             if is_editable:
                 menu.addAction(_("Edit label"), lambda: self.edit_label(False))
                 menu.addAction(_("Delete"), lambda: self.delete_contact(addr))
@@ -1481,7 +1481,7 @@ class ElectrumWindow(QMainWindow):
         self.update_invoices_tab()
 
     def show_invoice(self, key):
-        from electrum.paymentrequest import PaymentRequest
+        from electrum_drk.paymentrequest import PaymentRequest
         domain, memo, value, expiration, status, tx_hash = self.invoices[key]
         pr = PaymentRequest(self.config)
         pr.read_file(key)
@@ -1498,7 +1498,7 @@ class ElectrumWindow(QMainWindow):
         QMessageBox.information(self, 'Invoice', msg , 'OK')
 
     def do_pay_invoice(self, key):
-        from electrum.paymentrequest import PaymentRequest
+        from electrum_drk.paymentrequest import PaymentRequest
         domain, memo, value, expiration, status, tx_hash = self.invoices[key]
         pr = PaymentRequest(self.config)
         pr.read_file(key)
@@ -1760,7 +1760,7 @@ class ElectrumWindow(QMainWindow):
         vbox.addWidget(QLabel(_('Account name')+':'))
         e = QLineEdit()
         vbox.addWidget(e)
-        msg = _("Note: Newly created accounts are 'pending' until they receive bitcoins.") + " " \
+        msg = _("Note: Newly created accounts are 'pending' until they receive darkcoins.") + " " \
             + _("You will need to wait for 2 confirmations until the correct balance is displayed and more addresses are created for that account.")
         l = QLabel(msg)
         l.setWordWrap(True)
@@ -2119,7 +2119,7 @@ class ElectrumWindow(QMainWindow):
             self.show_transaction(tx)
 
     def do_process_from_txid(self):
-        from electrum import transaction
+        from electrum_drk import transaction
         txid, ok = QInputDialog.getText(self, _('Lookup transaction'), _('Transaction ID') + ':')
         if ok and txid:
             r = self.network.synchronous_get([ ('blockchain.transaction.get',[str(txid)]) ])[0]
@@ -2203,7 +2203,7 @@ class ElectrumWindow(QMainWindow):
         e.setReadOnly(True)
         vbox.addWidget(e)
 
-        defaultname = 'electrum-private-keys.csv'
+        defaultname = 'electrum-drk-private-keys.csv'
         select_msg = _('Select file to export your private keys to')
         hbox, filename_e, csv_button = filename_field(self, self.config, defaultname, select_msg)
         vbox.addLayout(hbox)
@@ -2283,7 +2283,7 @@ class ElectrumWindow(QMainWindow):
     def do_export_labels(self):
         labels = self.wallet.labels
         try:
-            fileName = self.getSaveFileName(_("Select file to save your labels"), 'electrum_labels.dat', "*.dat")
+            fileName = self.getSaveFileName(_("Select file to save your labels"), 'electrum-drk_labels.dat', "*.dat")
             if fileName:
                 with open(fileName, 'w+') as f:
                     json.dump(labels, f)
@@ -2299,7 +2299,7 @@ class ElectrumWindow(QMainWindow):
         d.setMinimumSize(400, 200)
         vbox = QVBoxLayout(d)
 
-        defaultname = os.path.expanduser('~/electrum-history.csv')
+        defaultname = os.path.expanduser('~/electrum-drk-history.csv')
         select_msg = _('Select file to export your wallet transactions to')
 
         hbox, filename_e, csv_button = filename_field(self, self.config, defaultname, select_msg)
@@ -2470,7 +2470,7 @@ class ElectrumWindow(QMainWindow):
         lang_label=QLabel(_('Language') + ':')
         grid.addWidget(lang_label, 1, 0)
         lang_combo = QComboBox()
-        from electrum.i18n import languages
+        from electrum_drk.i18n import languages
         lang_combo.addItems(languages.values())
         try:
             index = languages.keys().index(self.config.get("language",''))
@@ -2489,12 +2489,12 @@ class ElectrumWindow(QMainWindow):
         fee_e.setAmount(self.wallet.fee)
         grid.addWidget(fee_e, 2, 1)
         msg = _('Fee per kilobyte of transaction.') + '\n' \
-            + _('Recommended value') + ': ' + self.format_amount(10000) + ' ' + self.base_unit()
+            + _('Recommended value') + ': ' + self.format_amount(100000) + ' ' + self.base_unit()
         grid.addWidget(HelpButton(msg), 2, 2)
         if not self.config.is_modifiable('fee_per_kb'):
             for w in [fee_e, fee_label]: w.setEnabled(False)
 
-        units = ['BTC', 'mBTC', 'bits']
+        units = ['DRK', 'mDRK', 'bits']
         unit_label = QLabel(_('Base unit') + ':')
         grid.addWidget(unit_label, 3, 0)
         unit_combo = QComboBox()
@@ -2502,7 +2502,7 @@ class ElectrumWindow(QMainWindow):
         unit_combo.setCurrentIndex(units.index(self.base_unit()))
         grid.addWidget(unit_combo, 3, 1)
         grid.addWidget(HelpButton(_('Base unit of your wallet.')\
-                                             + '\n1BTC=1000mBTC.\n' \
+                                             + '\n1DRK=1000mDRK.\n' \
                                              + _(' These settings affects the fields in the Send tab')+' '), 3, 2)
 
         usechange_cb = QCheckBox(_('Use change addresses'))
@@ -2511,12 +2511,12 @@ class ElectrumWindow(QMainWindow):
         grid.addWidget(HelpButton(_('Using change addresses makes it more difficult for other people to track your transactions.')+' '), 4, 2)
         if not self.config.is_modifiable('use_change'): usechange_cb.setEnabled(False)
 
-        block_explorers = ['Blockchain.info', 'Blockr.io', 'Insight.is']
+        block_explorers = ['explorer.darkcoin.net', 'block-explorer.com', 'Blockr.io']
         block_ex_label = QLabel(_('Online Block Explorer') + ':')
         grid.addWidget(block_ex_label, 5, 0)
         block_ex_combo = QComboBox()
         block_ex_combo.addItems(block_explorers)
-        block_ex_combo.setCurrentIndex(block_explorers.index(self.config.get('block_explorer', 'Blockchain.info')))
+        block_ex_combo.setCurrentIndex(block_explorers.index(self.config.get('block_explorer', 'explorer.darkcoin.net')))
         grid.addWidget(block_ex_combo, 5, 1)
         grid.addWidget(HelpButton(_('Choose which online block explorer to use for functions that open a web browser')+' '), 5, 2)
 
@@ -2565,9 +2565,9 @@ class ElectrumWindow(QMainWindow):
 
         unit_result = units[unit_combo.currentIndex()]
         if self.base_unit() != unit_result:
-            if unit_result == 'BTC':
+            if unit_result == 'DRK':
                 self.decimal_point = 8
-            elif unit_result == 'mBTC':
+            elif unit_result == 'mDRK':
                 self.decimal_point = 5
             elif unit_result == 'bits':
                 self.decimal_point = 2
@@ -2611,7 +2611,7 @@ class ElectrumWindow(QMainWindow):
 
 
     def plugins_dialog(self):
-        from electrum.plugins import plugins
+        from electrum_drk.plugins import plugins
 
         d = QDialog(self)
         d.setWindowTitle(_('Electrum Plugins'))

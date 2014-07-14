@@ -109,11 +109,11 @@ class TestNewWallet(WalletTestCase):
     master_xpriv = "xprv9s21ZrQH143K3kjLyQFoizrnTgv9qumWXj6K6Z7wi5nNtrCMRPs6XggH6Bbgz9CUgPJnZnV74yUdRSr8qWVELr9QQTgU5aNL33ViMyD9nhs"
 
     first_account_name = "account1"
-    first_account_first_address = "1Jv9pLCJ4Sqr7aDYLGX5QhET4ps5qRcB9V"
-    first_account_second_address = "14n9EsZsgTTc4eC4TxeP1ccP8bXgwxPMmL"
+    first_account_first_address = "Ld975YW8975uNNuhWQWNgiJDH3EMtGacza"
+    first_account_second_address = "LP16W5shm7hfKStDe6dgHdg9Loty5FcukH"
 
-    import_private_key = "L52XzL2cMkHxqxBXRyEpnPQZGUs3uKiL3R11XbAdHigRzDozKZeW"
-    import_key_address = "15mKKb2eos1hWa6tisdPwwDC1a5J1y9nma"
+    import_private_key = "TAroS5Knm8GZcnpPycBgzjwwDLWMyQjDrcuGPPoArgrbW7Ln22qp"
+    import_key_address = "LPzGaoLUtXFkmNo3u1chDxGxDnSaBQTTxm"
 
     def setUp(self):
         super(TestNewWallet, self).setUp()

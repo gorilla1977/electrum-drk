@@ -24,18 +24,18 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GObject, cairo
 from decimal import Decimal
-from electrum.util import print_error
-from electrum.bitcoin import is_valid
-from electrum import mnemonic, pyqrnative, WalletStorage, Wallet
+from electrum_drk.util import print_error
+from electrum_drk.bitcoin import is_valid
+from electrum_drk import mnemonic, pyqrnative, WalletStorage, Wallet
 
 Gdk.threads_init()
-APP_NAME = "Electrum"
+APP_NAME = "Electrum-DRK"
 import platform
 MONOSPACE_FONT = 'Lucida Console' if platform.system() == 'Windows' else 'monospace'
 
-from electrum.util import format_satoshis, parse_URI
-from electrum.network import DEFAULT_SERVERS
-from electrum.bitcoin import MIN_RELAY_TX_FEE
+from electrum_drk.util import format_satoshis, parse_URI
+from electrum_drk.network import DEFAULT_SERVERS
+from electrum_drk.bitcoin import MIN_RELAY_TX_FEE
 
 def numbify(entry, is_int = False):
     text = entry.get_text().strip()
@@ -464,7 +464,7 @@ class ElectrumWindow:
         self.num_zeros = int(self.config.get('num_zeros',0))
 
         self.window = MyWindow(Gtk.WindowType.TOPLEVEL)
-        title = 'Electrum ' + self.wallet.electrum_version + '  -  ' + self.config.path
+        title = 'Electrum-DRK ' + self.wallet.electrum_version + '  -  ' + self.config.path
         if not self.wallet.seed: title += ' [seedless]'
         self.window.set_title(title)
         self.window.connect("destroy", Gtk.main_quit)
@@ -787,7 +787,7 @@ class ElectrumWindow:
             to_address = r
 
         if not is_valid(to_address):
-            self.show_message( "invalid bitcoin address:\n"+to_address)
+            self.show_message( "invalid darkcoin address:\n"+to_address)
             return
 
         try:
@@ -814,7 +814,7 @@ class ElectrumWindow:
             self.show_message(str(e))
             return
 
-        if tx.requires_fee(self.wallet.verifier) and fee < MIN_RELAY_TX_FEE:
+        if fee < tx.required_fee(self.wallet.verifier):
             self.show_message( "This transaction requires a higher fee, or it will not be propagated by the network." )
             return
 

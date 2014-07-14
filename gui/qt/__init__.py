@@ -17,9 +17,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import sys, time, datetime, re, threading
-from electrum.i18n import _, set_language
-from electrum.util import print_error, print_msg
-from electrum.plugins import run_hook
+from electrum_drk.i18n import _, set_language
+from electrum_drk.util import print_error, print_msg
+from electrum_drk.plugins import run_hook
 import os.path, json, ast, traceback
 import shutil
 
@@ -33,9 +33,9 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import PyQt4.QtCore as QtCore
 
-from electrum import WalletStorage, Wallet
-from electrum.i18n import _
-from electrum.bitcoin import MIN_RELAY_TX_FEE
+from electrum_drk import WalletStorage, Wallet
+from electrum_drk.i18n import _
+from electrum_drk.bitcoin import MIN_RELAY_TX_FEE
 
 try:
     import icons_rc
@@ -44,7 +44,7 @@ except Exception:
 
 from util import *
 from main_window import ElectrumWindow
-from electrum.plugins import init_plugins
+from electrum_drk.plugins import init_plugins
 
 
 class OpenFileEventFilter(QObject):
@@ -78,7 +78,7 @@ class ElectrumGui:
         m.addAction(_("Show/Hide"), self.show_or_hide)
         m.addAction(_("Dark/Light"), self.toggle_tray_icon)
         m.addSeparator()
-        m.addAction(_("Exit Electrum"), self.close)
+        m.addAction(_("Exit Electrum-DRK"), self.close)
         self.tray.setContextMenu(m)
 
     def toggle_tray_icon(self):
@@ -167,7 +167,7 @@ class ElectrumGui:
         self.dark_icon = self.config.get("dark_icon", False)
         icon = QIcon(":icons/electrum_dark_icon.png") if self.dark_icon else QIcon(':icons/electrum_light_icon.png')
         self.tray = QSystemTrayIcon(icon, None)
-        self.tray.setToolTip('Electrum')
+        self.tray.setToolTip('Electrum-DRK')
         self.tray.activated.connect(self.tray_activated)
         self.build_tray_menu()
         self.tray.show()
