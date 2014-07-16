@@ -187,7 +187,7 @@ class Blockchain(threading.Thread):
         return h
 
     def hash_header(self, header):
-        return rev_hex(Hash(self.header_to_string(header).decode('hex')).encode('hex'))
+        return rev_hex(getPoWHash(self.header_to_string(header).decode('hex')).encode('hex'))
 
     def pow_hash_header(self, header):
         return rev_hex(getPoWHash(self.header_to_string(header).decode('hex')).encode('hex'))

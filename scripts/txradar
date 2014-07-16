@@ -12,7 +12,7 @@ except:
     sys.exit(1)
 
 # 1. start interface and wait for connection
-interface = electrum.Interface('ecdsa.net:50002:s')
+interface = electrum.Interface('ec2-54-211-136-164.compute-1.amazonaws.com:50002:s')
 interface.start(wait = True)
 if not interface.is_connected:
     print "not connected"

@@ -10,7 +10,7 @@ except Exception:
 
 
 # 1. start the interface and wait for connection
-interface = electrum.Interface('electrum-drk.bysh.me:50002:s')
+interface = electrum.Interface('ec2-54-211-136-164.compute-1.amazonaws.com:50002:s')
 interface.start(wait = True)
 if not interface.is_connected:
     print "not connected"

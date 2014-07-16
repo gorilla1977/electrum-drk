@@ -336,7 +336,7 @@ class NetworkServer:
 
 if __name__ == '__main__':
     import simple_config
-    config = simple_config.SimpleConfig({'verbose':True, 'server':'electrum-drk.bysh.me:50002:s'})
+    config = simple_config.SimpleConfig({'verbose':True, 'server':'ec2-54-211-136-164.compute-1.amazonaws.com:50002:s'})
     server = NetworkServer(config)
     try:
         server.main_loop()
