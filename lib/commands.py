@@ -270,16 +270,16 @@ class Commands:
     def _mktx(self, outputs, fee = None, change_addr = None, domain = None):
         for to_address, amount in outputs:
             if not is_valid(to_address):
-                raise Exception("Invalid Bitcoin address", to_address)
+                raise Exception("Invalid Darkcoin address", to_address)
 
         if change_addr:
             if not is_valid(change_addr):
-                raise Exception("Invalid Bitcoin address", change_addr)
+                raise Exception("Invalid Darkcoin address", change_addr)
 
         if domain is not None:
             for addr in domain:
                 if not is_valid(addr):
-                    raise Exception("invalid Bitcoin address", addr)
+                    raise Exception("invalid Darkcoin address", addr)
 
                 if not self.wallet.is_mine(addr):
                     raise Exception("address not in wallet", addr)
