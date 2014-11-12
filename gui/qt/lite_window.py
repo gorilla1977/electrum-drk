@@ -713,9 +713,9 @@ class MiniActuator:
             password = None
 
         fee = 0
-        # 0.1 BTC = 10000000
+        # 0.1 DRK = 10000000
         if amount < bitcoin(1) / 10:
-            # 0.001 BTC
+            # 0.001 DRK
             fee = bitcoin(1) / 1000
 
         try:

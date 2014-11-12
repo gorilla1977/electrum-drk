@@ -457,9 +457,9 @@ class ElectrumWindow(QMainWindow):
         if self.decimal_point == 2:
             return 'bits'
         if self.decimal_point == 5:
-            return 'mBTC'
+            return 'mDRK'
         if self.decimal_point == 8:
-            return 'BTC'
+            return 'DRK'
         raise Exception('Unknown base unit')
 
     def update_status(self):
@@ -2518,7 +2518,7 @@ class ElectrumWindow(QMainWindow):
         if not self.config.is_modifiable('fee_per_kb'):
             for w in [fee_e, fee_label]: w.setEnabled(False)
 
-        units = ['BTC', 'mBTC', 'bits']
+        units = ['DRK', 'mDRK', 'bits']
         unit_label = QLabel(_('Base unit') + ':')
         grid.addWidget(unit_label, 3, 0)
         unit_combo = QComboBox()
@@ -2526,7 +2526,7 @@ class ElectrumWindow(QMainWindow):
         unit_combo.setCurrentIndex(units.index(self.base_unit()))
         grid.addWidget(unit_combo, 3, 1)
         grid.addWidget(HelpButton(_('Base unit of your wallet.')\
-                                             + '\n1BTC=1000mBTC.\n' \
+                                             + '\n1DRK=1000mDRK.\n' \
                                              + _(' These settings affects the fields in the Send tab')+' '), 3, 2)
 
         usechange_cb = QCheckBox(_('Use change addresses'))
@@ -2589,9 +2589,9 @@ class ElectrumWindow(QMainWindow):
 
         unit_result = units[unit_combo.currentIndex()]
         if self.base_unit() != unit_result:
-            if unit_result == 'BTC':
+            if unit_result == 'DRK':
                 self.decimal_point = 8
-            elif unit_result == 'mBTC':
+            elif unit_result == 'mDRK':
                 self.decimal_point = 5
             elif unit_result == 'bits':
                 self.decimal_point = 2
