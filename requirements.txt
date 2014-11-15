@@ -1,0 +1,9 @@
+argparse==1.2.1
+ecdsa==0.11
+pyasn1==0.1.7
+pyasn1-modules==0.0.5
+qrcode==5.0.1
+six==1.8.0
+slowaes==0.1a1
+tlslite==0.4.6
+wsgiref==0.1.2
