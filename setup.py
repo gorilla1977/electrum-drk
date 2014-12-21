@@ -66,7 +66,7 @@ setup(
     data_files=data_files,
     py_modules=[
         'electrum.account',
-        'electrum.bitcoin',
+        'electrum.darkcoin',
         'electrum.blockchain',
         'electrum.bmp',
         'electrum.commands',
@@ -118,10 +118,10 @@ setup(
         'electrum_plugins.qrscanner',
         'electrum_plugins.virtualkeyboard',
     ],
-    description="Lightweight Bitcoin Wallet",
+    description="Lightweight Darkcoin Wallet",
     author="Thomas Voegtlin",
     author_email="thomasv1@gmx.de",
     license="GNU GPLv3",
     url="https://electrum.org",
-    long_description="""Lightweight Bitcoin Wallet"""
+    long_description="""Lightweight Darkcoin Wallet"""
 )
