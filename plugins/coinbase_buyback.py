@@ -43,7 +43,7 @@ class Plugin(BasePlugin):
 
     def fullname(self): return 'Coinbase BuyBack'
 
-    def description(self): return 'After sending bitcoin, prompt the user with the option to rebuy them via Coinbase.\n\nMarcell Ortutay, 1FNGQvm29tKM7y3niq63RKi7Qbg7oZ3jrB'
+    def description(self): return 'After sending darkcoin, prompt the user with the option to rebuy them via Coinbase.\n\nMarcell Ortutay, 1FNGQvm29tKM7y3niq63RKi7Qbg7oZ3jrB'
 
     def __init__(self, gui, name):
         BasePlugin.__init__(self, gui, name)
@@ -102,7 +102,7 @@ def do_buy(credentials, amount):
     resp = conn.auth_request('POST', '/api/v1/buys', urlencode(params), None)
 
     if resp.status != 200:
-        message(_('Error, could not buy bitcoin'))
+        message(_('Error, could not buy darkcoin'))
         return
     content = json.loads(resp.read())
     if content['success']:
@@ -111,7 +111,7 @@ def do_buy(credentials, amount):
         if content['errors']:
             message(_('Error: ') + string.join(content['errors'], '\n'))
         else:
-            message(_('Error, could not buy bitcoin'))
+            message(_('Error, could not buy darkcoin'))
 
 def get_coinbase_total_price(credentials, amount):
     conn = httplib.HTTPSConnection('coinbase.com')

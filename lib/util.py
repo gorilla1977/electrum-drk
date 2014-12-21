@@ -159,18 +159,18 @@ def age(from_date, since_date = None, target_tz=None, include_seconds=False):
 
 def parse_URI(uri):
     import urlparse
-    import bitcoin
+    import darkcoin
     from decimal import Decimal
 
     if ':' not in uri:
-        assert bitcoin.is_address(uri)
+        assert darkcoin.is_address(uri)
         return uri, None, None, None, None
 
     u = urlparse.urlparse(uri)
-    assert u.scheme == 'bitcoin'
+    assert u.scheme == 'darkcoin'
 
     address = u.path
-    valid_address = bitcoin.is_address(address)
+    valid_address = darkcoin.is_address(address)
 
     pq = urlparse.parse_qs(u.query)
     

@@ -1,6 +1,6 @@
 import threading, time, Queue, os, sys, shutil, random
 from util import user_dir, appdata_dir, print_error, print_msg
-from bitcoin import *
+from darkcoin import *
 import interface
 from blockchain import Blockchain
 

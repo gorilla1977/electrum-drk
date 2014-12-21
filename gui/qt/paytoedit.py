@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight Bitcoin client
+# Electrum-DRK : lightweight Darkcoin client
 # Copyright (C) 2012 thomasv@gitorious
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ from qrtextedit import QRTextEdit
 
 import re
 from decimal import Decimal
-from electrum import bitcoin
+from electrum import darkcoin
 
 RE_ADDRESS = '[1-9A-HJ-NP-Za-km-z]{26,}'
 RE_ALIAS = '(.*?)\s*\<([1-9A-HJ-NP-Za-km-z]{26,})\>'
@@ -89,7 +89,7 @@ class PayToEdit(QRTextEdit):
         r = line.strip()
         m = re.match('^'+RE_ALIAS+'$', r)
         address = m.group(2) if m else r
-        assert bitcoin.is_address(address)
+        assert darkcoin.is_address(address)
         return address
 
 

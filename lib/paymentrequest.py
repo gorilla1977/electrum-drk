@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight Bitcoin client
+# Electrum-DRK : lightweight Darkcoin client
 # Copyright (C) 2014 Thomas Voegtlin
 #
 # This program is free software: you can redistribute it and/or modify
@@ -40,14 +40,14 @@ except ImportError:
     sys.exit("Error: requests does not seem to be installed. Try 'sudo pip install requests'")
 
 
-import bitcoin
+import darkcoin
 import util
 import transaction
 import x509
 
 
-REQUEST_HEADERS = {'Accept': 'application/bitcoin-paymentrequest', 'User-Agent': 'Electrum'}
-ACK_HEADERS = {'Content-Type':'application/bitcoin-payment','Accept':'application/bitcoin-paymentack','User-Agent':'Electrum'}
+REQUEST_HEADERS = {'Accept': 'application/darkcoin-paymentrequest', 'User-Agent': 'Electrum'}
+ACK_HEADERS = {'Content-Type':'application/darkcoin-payment','Accept':'application/darkcoin-paymentack','User-Agent':'Electrum'}
 
 
 ca_list = {}
@@ -113,7 +113,7 @@ class PaymentRequest:
             self.error = "cannot read"
             return
 
-        self.id = bitcoin.sha256(r)[0:16].encode('hex')
+        self.id = darkcoin.sha256(r)[0:16].encode('hex')
         filename = os.path.join(self.dir_path, self.id)
         with open(filename,'w') as f:
             f.write(r)
@@ -133,7 +133,7 @@ class PaymentRequest:
         with open(filename,'r') as f:
             r = f.read()
 
-        assert key == bitcoin.sha256(r)[0:16].encode('hex')
+        assert key == darkcoin.sha256(r)[0:16].encode('hex')
         self.id = key
         self.parse(r)
 
@@ -329,7 +329,7 @@ if __name__ == "__main__":
         uri = sys.argv[1]
     except:
         print "usage: %s url"%sys.argv[0]
-        print "example url: \"bitcoin:17KjQgnXC96jakzJe9yo8zxqerhqNptmhq?amount=0.0018&r=https%3A%2F%2Fbitpay.com%2Fi%2FMXc7qTM5f87EC62SWiS94z\""
+        print "example url: \"darkcoin:17KjQgnXC96jakzJe9yo8zxqerhqNptmhq?amount=0.0018&r=https%3A%2F%2Fbitpay.com%2Fi%2FMXc7qTM5f87EC62SWiS94z\""
         sys.exit(1)
 
     address, amount, label, message, request_url = util.parse_URI(uri)

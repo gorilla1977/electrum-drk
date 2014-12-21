@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 #
-# Electrum - lightweight Bitcoin client
+# Electrum-DRK : lightweight Darkcoin client
 # Copyright (C) 2011 thomasv@gitorious
 #
 # This program is free software: you can redistribute it and/or modify
@@ -77,7 +77,7 @@ def int_to_hex(i, length=1):
 
 
 def var_int(i):
-    # https://en.bitcoin.it/wiki/Protocol_specification#Variable_length_integer
+    # https://en.darkcoin.it/wiki/Protocol_specification#Variable_length_integer
     if i<0xfd:
         return int_to_hex(i)
     elif i<=0xffff:
@@ -234,7 +234,7 @@ def b58encode(v):
         long_value = div
     result = __b58chars[long_value] + result
 
-    # Bitcoin does a little leading-zero-compression:
+    # Darkcoin does a little leading-zero-compression:
     # leading 0-bytes in the input become leading-1s
     nPad = 0
     for c in v:
@@ -379,7 +379,7 @@ from ecdsa.util import string_to_number, number_to_string
 def msg_magic(message):
     varint = var_int(len(message))
     encoded_varint = "".join([chr(int(varint[i:i+2], 16)) for i in xrange(0, len(varint), 2)])
-    return "\x18Bitcoin Signed Message:\n" + encoded_varint + message
+    return "\x18Darkcoin Signed Message:\n" + encoded_varint + message
 
 
 def verify_message(address, signature, message):
@@ -640,22 +640,22 @@ def _CKD_pub(cK, c, s):
     return cK_n, c_n
 
 
-BITCOIN_HEADER_PRIV = "0488ade4"
-BITCOIN_HEADER_PUB = "0488b21e"
+DARKCOIN_HEADER_PRIV = "0488ade4"
+DARKCOIN_HEADER_PUB = "0488b21e"
 
 TESTNET_HEADER_PRIV = "04358394"
 TESTNET_HEADER_PUB = "043587cf"
 
-BITCOIN_HEADERS = (BITCOIN_HEADER_PUB, BITCOIN_HEADER_PRIV)
+DARKCOIN_HEADERS = (DARKCOIN_HEADER_PUB, DARKCOIN_HEADER_PRIV)
 TESTNET_HEADERS = (TESTNET_HEADER_PUB, TESTNET_HEADER_PRIV)
 
 def _get_headers(testnet):
-    """Returns the correct headers for either testnet or bitcoin, in the form
+    """Returns the correct headers for either testnet or dark coin, in the form
     of a 2-tuple, like (public, private)."""
     if testnet:
         return TESTNET_HEADERS
     else:
-        return BITCOIN_HEADERS
+        return DARKCOIN_HEADERS
 
 
 def deserialize_xkey(xkey):
@@ -664,11 +664,11 @@ def deserialize_xkey(xkey):
     assert len(xkey) == 78
 
     xkey_header = xkey[0:4].encode('hex')
-    # Determine if the key is a bitcoin key or a testnet key.
+    # Determine if the key is a darkcoin key or a testnet key.
     if xkey_header in TESTNET_HEADERS:
         head = TESTNET_HEADER_PRIV
-    elif xkey_header in BITCOIN_HEADERS:
-        head = BITCOIN_HEADER_PRIV
+    elif xkey_header in DARKCOIN_HEADERS:
+        head = DARKCOIN_HEADER_PRIV
     else:
         raise Exception("Unknown xkey header: '%s'" % xkey_header)
 
@@ -710,7 +710,7 @@ def bip32_root(seed, testnet=False):
     import hmac
     header_pub, header_priv = _get_headers(testnet)
     seed = seed.decode('hex')
-    I = hmac.new("Bitcoin seed", seed, hashlib.sha512).digest()
+    I = hmac.new("Darkcoin seed", seed, hashlib.sha512).digest()
     master_k = I[0:32]
     master_c = I[32:]
     K, cK = get_pubkeys_from_secret(master_k)

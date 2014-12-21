@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight Bitcoin client
+# Electrum-DRK : lightweight Darkcoin client
 # Copyright (C) 2011 thomasv@gitorious
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,13 +27,13 @@ import math
 
 from util import print_msg, print_error
 
-from bitcoin import *
+from darkcoin import *
 from account import *
 from version import *
 
 from transaction import Transaction
 from plugins import run_hook
-import bitcoin
+import darkcoin
 from synchronizer import WalletSynchronizer
 
 COINBASE_MATURITY = 100
@@ -1266,9 +1266,9 @@ class NewWallet(Deterministic_Wallet):
         assert deserialize_xkey(xpriv)[3] == deserialize_xkey(xpub)[3]
 
     def create_xprv_wallet(self, xprv, password):
-        xpub = bitcoin.xpub_from_xprv(xprv)
+        xpub = darkcoin.xpub_from_xprv(xprv)
         account = BIP32_Account({'xpub':xpub})
-        account_id = 'm/' + bitcoin.get_xkey_name(xpub)
+        account_id = 'm/' + darkcoin.get_xkey_name(xpub)
         self.storage.put('seed_version', self.seed_version, True)
         self.add_master_private_key(account_id, xprv, password)
         self.add_master_public_key(account_id, xpub)
@@ -1276,7 +1276,7 @@ class NewWallet(Deterministic_Wallet):
 
     def create_watching_only_wallet(self, xpub):
         account = BIP32_Account({'xpub':xpub})
-        account_id = 'm/' + bitcoin.get_xkey_name(xpub)
+        account_id = 'm/' + darkcoin.get_xkey_name(xpub)
         self.storage.put('seed_version', self.seed_version, True)
         self.add_master_public_key(account_id, xpub)
         self.add_account(account_id, account)
@@ -1619,7 +1619,7 @@ class Wallet(object):
         if not text:
             return False
         for x in text.split():
-            if not bitcoin.is_address(x):
+            if not darkcoin.is_address(x):
                 return False
         return True
 
@@ -1628,7 +1628,7 @@ class Wallet(object):
         if not text:
             return False
         for x in text.split():
-            if not bitcoin.is_private_key(x):
+            if not darkcoin.is_private_key(x):
                 return False
         return True
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight Bitcoin client
+# Electrum-DRK: lightweight Darkcoin client
 # Copyright (C) 2012 thomasv@gitorious
 #
 # This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ import PyQt4.QtCore as QtCore
 
 from electrum import WalletStorage, Wallet
 from electrum.i18n import _
-from electrum.bitcoin import MIN_RELAY_TX_FEE
+from electrum.darkcoin import MIN_RELAY_TX_FEE
 
 try:
     import icons_rc

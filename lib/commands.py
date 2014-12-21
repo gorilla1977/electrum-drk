@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight Bitcoin client
+# Electrum-DRK : lightweight Darkcoin client
 # Copyright (C) 2011 thomasv@gitorious
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,9 @@ import datetime
 import time
 import copy
 from util import print_msg, format_satoshis
-from bitcoin import is_valid, hash_160_to_bc_address, hash_160
+from darkcoin import is_valid, hash_160_to_bc_address, hash_160
 from decimal import Decimal
-import bitcoin
+import darkcoin
 from transaction import Transaction
 
 
@@ -53,8 +53,8 @@ payto_options = ' --fee, -f: set transaction fee\n --fromaddr, -F: send from add
 listaddr_options = " -a: show all addresses, including change addresses\n -l: include labels in results"
 restore_options = " accepts a seed or master public key."
 mksendmany_syntax = 'mksendmanytx <recipient> <amount> [<recipient> <amount> ...]'
-payto_syntax = "payto <recipient> <amount> [label]\n<recipient> can be a bitcoin address or a label"
-paytomany_syntax = "paytomany <recipient> <amount> [<recipient> <amount> ...]\n<recipient> can be a bitcoin address or a label"
+payto_syntax = "payto <recipient> <amount> [label]\n<recipient> can be a darkcoin address or a label"
+paytomany_syntax = "paytomany <recipient> <amount> [<recipient> <amount> ...]\n<recipient> can be a darkcoin address or a label"
 signmessage_syntax = 'signmessage <address> <message>\nIf you want to lead or end a message with spaces, or want double spaces inside the message make sure you quote the string. I.e. " Hello  This is a weird String "'
 verifymessage_syntax = 'verifymessage <address> <signature> <message>\nIf you want to lead or end a message with spaces, or want double spaces inside the message make sure you quote the string. I.e. " Hello  This is a weird String "'
 
@@ -65,11 +65,11 @@ verifymessage_syntax = 'verifymessage <address> <signature> <message>\nIf you wa
 #                                                            requires_password
 register_command('contacts',             0, 0, False, True,  False, 'Show your list of contacts')
 register_command('create',               0, 0, False, True,  False, 'Create a new wallet')
-register_command('createmultisig',       2, 2, False, True,  False, 'similar to bitcoind\'s command')
-register_command('createrawtransaction', 2, 2, False, True,  False, 'similar to bitcoind\'s command')
+register_command('createmultisig',       2, 2, False, True,  False, 'similar to darkcoind\'s command')
+register_command('createrawtransaction', 2, 2, False, True,  False, 'similar to darkcoind\'s command')
 register_command('deseed',               0, 0, False, True,  False, 'Remove seed from wallet, creating a seedless, watching-only wallet.')
-register_command('decoderawtransaction', 1, 1, False, False, False, 'similar to bitcoind\'s command')
-register_command('getprivatekeys',       1, 1, False, True,  True,  'Get the private keys of a given address', 'getprivatekeys <bitcoin address>')
+register_command('decoderawtransaction', 1, 1, False, False, False, 'similar to darkcoind\'s command')
+register_command('getprivatekeys',       1, 1, False, True,  True,  'Get the private keys of a given address', 'getprivatekeys <darkcoin address>')
 register_command('dumpprivkeys',         0, 0, False, True,  True,  'Dump all private keys in your wallet')
 register_command('freeze',               1, 1, False, True,  True,  'Freeze the funds at one of your wallet\'s addresses', 'freeze <address>')
 register_command('getbalance',           0, 1, True,  True,  False, 'Return the balance of your wallet, or of one account in your wallet', 'getbalance [<account>]')
@@ -78,7 +78,7 @@ register_command('getversion',           0, 0, False, False, False, 'Return the 
 register_command('getaddressbalance',    1, 1, True,  False, False, 'Return the balance of an address', 'getaddressbalance <address>')
 register_command('getaddresshistory',    1, 1, True,  False, False, 'Return the transaction history of a wallet address', 'getaddresshistory <address>')
 register_command('getconfig',            1, 1, False, False, False, 'Return a configuration variable', 'getconfig <name>')
-register_command('getpubkeys',           1, 1, False, True,  False, 'Return the public keys for a wallet address', 'getpubkeys <bitcoin address>')
+register_command('getpubkeys',           1, 1, False, True,  False, 'Return the public keys for a wallet address', 'getpubkeys <darkcoin address>')
 register_command('getrawtransaction',    1, 1, True,  False, False, 'Retrieve a transaction', 'getrawtransaction <txhash>')
 register_command('getseed',              0, 0, False, True,  True,  'Print the generation seed of your wallet.')
 register_command('getmpk',               0, 0, False, True,  False, 'Return your wallet\'s master public key', 'getmpk')
@@ -265,7 +265,7 @@ class Commands:
         return self.wallet.sign_message(address, message, self.password)
 
     def verifymessage(self, address, signature, message):
-        return bitcoin.verify_message(address, signature, message)
+        return darkcoin.verify_message(address, signature, message)
 
     def _mktx(self, outputs, fee = None, change_addr = None, domain = None):
         for to_address, amount in outputs:
@@ -382,7 +382,7 @@ class Commands:
             return "unknown transaction"
 
     def encrypt(self, pubkey, message):
-        return bitcoin.encrypt_message(message, pubkey)
+        return darkcoin.encrypt_message(message, pubkey)
 
     def decrypt(self, pubkey, message):
         return self.wallet.decrypt_message(pubkey, message, self.password)

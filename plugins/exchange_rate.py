@@ -15,17 +15,17 @@ from electrum_gui.qt.util import *
 from electrum_gui.qt.amountedit import AmountEdit
 
 
-EXCHANGES = ["BitcoinAverage",
-             "BitcoinVenezuela",
-             "Bitcurex",
-             "Bitmarket",
-             "BitPay",
+EXCHANGES = ["DarkcoinAverage",
+             "DarkcoinVenezuela",
+             "Drkcurex",
+             "Brkmarket",
+             "DrkPay",
              "Blockchain",
-             "BTCChina",
+             "DRKChina",
              "CaVirtEx",
              "Coinbase",
              "CoinDesk",
-             "LocalBitcoins",
+             "LocalDarkcoins",
              "Winkdex"]
 
 
@@ -82,17 +82,17 @@ class Exchanger(threading.Thread):
     def update_rate(self):
         self.use_exchange = self.parent.config.get('use_exchange', "Blockchain")
         update_rates = {
-            "BitcoinAverage": self.update_ba,
-            "BitcoinVenezuela": self.update_bv,
-            "Bitcurex": self.update_bx,
-            "Bitmarket": self.update_bm,
-            "BitPay": self.update_bp,
+            "DarkcoinAverage": self.update_ba,
+            "DarkcoinVenezuela": self.update_bv,
+            "Drkcurex": self.update_bx,
+            "Drkmarket": self.update_bm,
+            "DrkPay": self.update_bp,
             "Blockchain": self.update_bc,
-            "BTCChina": self.update_CNY,
+            "DRKChina": self.update_CNY,
             "CaVirtEx": self.update_cv,
             "CoinDesk": self.update_cd,
             "Coinbase": self.update_cb,
-            "LocalBitcoins": self.update_lb,
+            "LocalDarkcoins": self.update_lb,
             "Winkdex": self.update_wd,
         }
         try:
@@ -156,7 +156,7 @@ class Exchanger(threading.Thread):
 
     def update_bm(self):
         try:
-            jsonresp = self.get_json('www.bitmarket.pl', "/json/BTCPLN/ticker.json")
+            jsonresp = self.get_json('www.darkmarket.pl', "/json/BTCPLN/ticker.json")
         except Exception:
             return
         quote_currencies = {"PLN": 0.0}
@@ -171,7 +171,7 @@ class Exchanger(threading.Thread):
 
     def update_bx(self):
         try:
-            jsonresp = self.get_json('pln.bitcurex.com', "/data/ticker.json")
+            jsonresp = self.get_json('pln.darkcurex.com', "/data/ticker.json")
         except Exception:
             return
         quote_currencies = {"PLN": 0.0}
@@ -201,7 +201,7 @@ class Exchanger(threading.Thread):
 
     def update_bp(self):
         try:
-            jsonresp = self.get_json('bitpay.com', "/api/rates")
+            jsonresp = self.get_json('darkpay.com', "/api/rates")
         except Exception:
             return
         quote_currencies = {}
@@ -250,7 +250,7 @@ class Exchanger(threading.Thread):
 
     def update_lb(self):
         try:
-            jsonresp = self.get_json('localbitcoins.com', "/bitcoinaverage/ticker-all-currencies/")
+            jsonresp = self.get_json('localdarkcoins.com', "/darkcoinaverage/ticker-all-currencies/")
         except Exception:
             return
         quote_currencies = {}
@@ -266,7 +266,7 @@ class Exchanger(threading.Thread):
 
     def update_bv(self):
         try:
-            jsonresp = self.get_json('api.bitcoinvenezuela.com', "/")
+            jsonresp = self.get_json('api.darkcoinvenezuela.com', "/")
         except Exception:
             return
         quote_currencies = {}
@@ -282,7 +282,7 @@ class Exchanger(threading.Thread):
 
     def update_ba(self):
         try:
-            jsonresp = self.get_json('api.bitcoinaverage.com', "/ticker/global/all")
+            jsonresp = self.get_json('api.darkcoinaverage.com', "/ticker/global/all")
         except Exception:
             return
         quote_currencies = {}
@@ -429,16 +429,16 @@ class Plugin(BasePlugin):
                     resp_hist = self.exchanger.get_json('winkdex.com', "/static/data/0_86400_730.json")['prices']
                 except Exception:
                     return
-            elif cur_exchange == "BitcoinVenezuela":
+            elif cur_exchange == "DarkcoinVenezuela":
                 cur_currency = self.fiat_unit()
                 if cur_currency == "VEF":
                     try:
-                        resp_hist = self.exchanger.get_json('api.bitcoinvenezuela.com', "/historical/index.php?coin=BTC")['VEF_BTC']
+                        resp_hist = self.exchanger.get_json('api.darkcoinvenezuela.com', "/historical/index.php?coin=BTC")['VEF_BTC']
                     except Exception:
                         return
                 elif cur_currency == "ARS":
                     try:
-                        resp_hist = self.exchanger.get_json('api.bitcoinvenezuela.com', "/historical/index.php?coin=BTC")['ARS_BTC']
+                        resp_hist = self.exchanger.get_json('api.darkcoinvenezuela.com', "/historical/index.php?coin=BTC")['ARS_BTC']
                     except Exception:
                         return
                 else:
@@ -473,7 +473,7 @@ class Plugin(BasePlugin):
                         tx_USD_val = "%.2f %s" % (Decimal(tx_info['value']) / 100000000 * Decimal(tx_rate), "USD")
                     except ValueError:
                         tx_USD_val = "%.2f %s" % (self.btc_rate * Decimal(tx_info['value'])/100000000 , "USD")
-                elif cur_exchange == "BitcoinVenezuela":
+                elif cur_exchange == "DarkcoinVenezuela":
                     tx_time_str = datetime.datetime.fromtimestamp(tx_time).strftime('%Y-%m-%d')
                     try:
                         num = resp_hist[tx_time_str].replace(',','')
@@ -483,7 +483,7 @@ class Plugin(BasePlugin):
 
                 if cur_exchange == "CoinDesk" or cur_exchange == "Winkdex":
                     item.setText(5, tx_USD_val)
-                elif cur_exchange == "BitcoinVenezuela":
+                elif cur_exchange == "DarkcoinVenezuela":
                     item.setText(5, tx_BTCVEN_val)
                 if Decimal(str(tx_info['value'])) < 0:
                     item.setForeground(5, QBrush(QColor("#BC1E1E")))
@@ -525,9 +525,9 @@ class Plugin(BasePlugin):
                 cur_exchange = self.config.get('use_exchange', "Blockchain")
                 if cur_request == "USD" and (cur_exchange == "CoinDesk" or cur_exchange == "Winkdex"):
                     hist_checkbox.setEnabled(True)
-                elif cur_request == "VEF" and (cur_exchange == "BitcoinVenezuela"):
+                elif cur_request == "VEF" and (cur_exchange == "DarkcoinVenezuela"):
                     hist_checkbox.setEnabled(True)
-                elif cur_request == "ARS" and (cur_exchange == "BitcoinVenezuela"):
+                elif cur_request == "ARS" and (cur_exchange == "DarkcoinVenezuela"):
                     hist_checkbox.setEnabled(True)
                 else:
                     hist_checkbox.setChecked(False)
@@ -557,7 +557,7 @@ class Plugin(BasePlugin):
                         hist_checkbox.setEnabled(True)
                     else:
                         disable_check()
-                elif cur_request == "BitcoinVenezuela":
+                elif cur_request == "DarkcoinVenezuela":
                     if cur_currency == "VEF" or cur_currency == "ARS":
                         hist_checkbox.setEnabled(True)
                     else:
@@ -582,7 +582,7 @@ class Plugin(BasePlugin):
             cur_exchange = self.config.get('use_exchange', "Blockchain")
             if cur_exchange == "CoinDesk" or cur_exchange == "Winkdex":
                 hist_checkbox.setEnabled(True)
-            elif cur_exchange == "BitcoinVenezuela":
+            elif cur_exchange == "DarkcoinVenezuela":
                 hist_checkbox.setEnabled(True)
             else:
                 hist_checkbox.setEnabled(False)

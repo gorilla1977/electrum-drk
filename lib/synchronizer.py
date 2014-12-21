@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight Bitcoin client
+# Electrum-DRK : lightweight Darkcoin client
 # Copyright (C) 2014 Thomas Voegtlin
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 
 import threading
 import Queue
-import bitcoin
+import darkcoin
 from util import print_error
 from transaction import Transaction
 
@@ -182,7 +182,7 @@ class WalletSynchronizer(threading.Thread):
             elif method == 'blockchain.transaction.get':
                 tx_hash = params[0]
                 tx_height = params[1]
-                assert tx_hash == bitcoin.hash_encode(bitcoin.Hash(result.decode('hex')))
+                assert tx_hash == darkcoin.hash_encode(darkcoin.Hash(result.decode('hex')))
                 tx = Transaction.deserialize(result)
                 self.wallet.receive_tx_callback(tx_hash, tx, tx_height)
                 self.was_updated = True

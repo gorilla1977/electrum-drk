@@ -7,7 +7,7 @@ from electrum.i18n import _
 import re
 import os
 from electrum import Transaction
-from electrum.bitcoin import MIN_RELAY_TX_FEE, is_valid
+from electrum.darkcoin import MIN_RELAY_TX_FEE, is_valid
 from electrum_gui.qt.qrcodewidget import QRCodeWidget
 from electrum import bmp
 from electrum_gui.qt import HelpButton, EnterButton

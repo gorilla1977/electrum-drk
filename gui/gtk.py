@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - lightweight Bitcoin client
+# Electrum-DRK : lightweight Darkcoin client
 # Copyright (C) 2011 thomasv@gitorious
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GObject, cairo
 from decimal import Decimal
 from electrum.util import print_error
-from electrum.bitcoin import is_valid
+from electrum.darkcoin import is_valid
 from electrum import mnemonic, WalletStorage, Wallet
 
 Gdk.threads_init()
@@ -35,7 +35,7 @@ MONOSPACE_FONT = 'Lucida Console' if platform.system() == 'Windows' else 'monosp
 
 from electrum.util import format_satoshis, parse_URI
 from electrum.network import DEFAULT_SERVERS
-from electrum.bitcoin import MIN_RELAY_TX_FEE
+from electrum.darkcoin import MIN_RELAY_TX_FEE
 
 def numbify(entry, is_int = False):
     text = entry.get_text().strip()
@@ -787,7 +787,7 @@ class ElectrumWindow:
             to_address = r
 
         if not is_valid(to_address):
-            self.show_message( "invalid bitcoin address:\n"+to_address)
+            self.show_message( "invalid darkcoin address:\n"+to_address)
             return
 
         try:

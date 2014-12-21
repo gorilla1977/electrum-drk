@@ -4,7 +4,7 @@ import PyQt4.QtCore as QtCore
 
 from electrum.i18n import _
 from electrum import Wallet, Wallet_2of2, Wallet_2of3
-from electrum import bitcoin
+from electrum import darkcoin
 from electrum import util
 
 import seed_dialog
@@ -344,7 +344,7 @@ class InstallWizard(QDialog):
 
 
     def create_cold_seed(self, wallet):
-        from electrum.bitcoin import mnemonic_to_seed, bip32_root
+        from electrum.darkcoin import mnemonic_to_seed, bip32_root
         msg = _('You are about to generate the cold storage seed of your wallet.') + '\n' \
               + _('For safety, you should do this on an offline computer.')
         icon = QPixmap( ':icons/cold_seed.png').scaledToWidth(56)

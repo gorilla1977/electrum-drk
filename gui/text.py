@@ -3,7 +3,7 @@ from decimal import Decimal
 _ = lambda x:x
 #from i18n import _
 from electrum.util import format_satoshis, set_verbosity
-from electrum.bitcoin import is_valid
+from electrum.darkcoin import is_valid
 
 from electrum import Wallet, WalletStorage
 
