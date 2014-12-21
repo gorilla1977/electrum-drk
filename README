@@ -1,4 +1,4 @@
-Electrum - lightweight Bitcoin client
+Electrum-DRK : lightweight Darkcoin client
 
 Licence: GNU GPL v3
 Author: Thomas Voegtlin
@@ -9,18 +9,18 @@ Homepage: https://electrum.org/
 1. GETTING STARTED
 ------------------
 
-To run Electrum from this directory, just do:
+To run Electrum-DRK from this directory, just do:
 
   ./electrum
 
-If you install Electrum on your system, you can run it from any
+If you install Electrum-DRK on your system, you can run it from any
 directory:
 
   sudo python setup.py install
   electrum
 
 
-To start Electrum from your web browser, see
+To start Electrum-DRK from your web browser, see
 http://electrum.org/bitcoin_URIs.html
 
 
